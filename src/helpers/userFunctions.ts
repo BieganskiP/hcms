@@ -83,7 +83,7 @@ export const logout = async () => {
     toast.success("Logout successfull");
   } catch (error) {
     const [errorCode, errorMessage] = extractErrorDetails(error);
-    console.error(`Error during sign out: ${errorCode}, ${errorMessage}`);
+    toast.error(`Error during sign out: ${errorCode}, ${errorMessage}`);
     throw new Error(errorMessage);
   }
 };

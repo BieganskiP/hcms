@@ -11,7 +11,8 @@ import Link from "next/link";
 export default function Register() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
+  const [error, setError] = useState<string>("");
+  
   const router = useRouter();
 
   const handleGoogleSignUp = async () => {
@@ -39,6 +40,7 @@ export default function Register() {
     <main className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-full max-w-xs">
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          {error && <div className="mb-4 text-red-500">{error}</div>}
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
