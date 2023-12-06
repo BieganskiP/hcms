@@ -1,104 +1,61 @@
-"use client";
-
-import { useState } from "react";
-import Link from "next/link";
+import TextInput from "@/components/ui/TextInput";
+import Button from "@/components/ui/Button";
 import {
-  signInWithEmailPassword,
   signUpWithGoogle,
+  signInWithEmailPassword,
 } from "@/helpers/userFunctions";
-import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function Home() {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
-
-  const router = useRouter();
-
   const handleGoogleSignUp = async () => {
     try {
       await signUpWithGoogle();
-
       router.push("/dashboard");
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleSignIn = async () => {
+  const handleSignInWithEmail = async () => {
     try {
+      if (!email || !password) {
+        toast("Email and password are required");
+        return;
+      }
       await signInWithEmailPassword(email, password);
       router.push("/dashboard");
     } catch (error: any) {
-      if (error.message === "auth/invalid-credential") {
-        setError("Incorrect login credentials");
+      const errorMessage = error.message || "An unknown error occurred";
+      if (errorMessage === "auth/invalid-credential") {
+        toast("Incorrect login credentials");
       } else {
-        setError("Troubles logging in, please try again");
+        toast("Troubles logging in, please try again");
       }
     }
   };
-
   return (
     <main className="flex justify-center items-center h-screen ">
       <form>
-        {error && <div className="mb-4 text-red-500">{error}</div>}
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="email"
-          >
-            Email
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="email"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="mb-6">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="password"
-          >
-            Password
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            id="password"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className="flex items-center justify-between mb-4">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
-            onClick={handleSignIn}
-          >
-            Sign In
-          </button>
-
-          <Link
-            href="/register"
-            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-          >
-            Register
-          </Link>
-        </div>
-        <div className="flex flex-col space-y-4">
-          <button
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
-            onClick={handleGoogleSignUp}
-          >
-            Sign in with Google
-          </button>
-        </div>
+        <TextInput
+          label="Email"
+          id="email"
+          type="email"
+          placeholder="Email"
+          htmlFor="email"
+        />
+        <TextInput
+          label="Password"
+          id="password"
+          type="password"
+          placeholder="Password"
+          htmlFor="password"
+        />
+        <Button
+          variant="primary"
+          type="button"
+          action={handleSignInWithEmail}
+        />
+        <Button variant="secondary" type="button" action={handleGoogleSignUp} />
       </form>
     </main>
   );

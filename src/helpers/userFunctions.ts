@@ -32,7 +32,8 @@ export const signUpWithEmailPassword = async (
 
     return user;
   } catch (error) {
-    const [errorMessage] = extractErrorDetails(error);
+    const [errorCode, errorMessage] = extractErrorDetails(error);
+    toast.error(`Error during sign out: ${errorCode}, ${errorMessage}`);
     throw new Error(errorMessage);
   }
 };
@@ -52,7 +53,8 @@ export const signInWithEmailPassword = async (
 
     return user;
   } catch (error) {
-    const [errorMessage] = extractErrorDetails(error);
+    const [errorCode, errorMessage] = extractErrorDetails(error);
+    toast.error(`Error during sign out: ${errorCode}, ${errorMessage}`);
     throw new Error(errorMessage);
   }
 };
@@ -71,7 +73,8 @@ export const signUpWithGoogle = async () => {
 
     return user;
   } catch (error) {
-    const [errorMessage] = extractErrorDetails(error);
+    const [errorCode, errorMessage] = extractErrorDetails(error);
+    toast.error(`Error during sign out: ${errorCode}, ${errorMessage}`);
     throw new Error(errorMessage);
   }
 };
